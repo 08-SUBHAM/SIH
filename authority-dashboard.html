@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Authority Control Center</title>
+  <style>
+    :root{
+      --bg:#f8f9fa;
+      --card:#ffffff;
+      --muted:#f1f3f5;
+      --text:#212529;
+      --text-muted:#495057;
+      --primary:#0d6efd;
+      --destructive:#dc3545;
+      --warning:#ffc107;
+      --success:#198754;
+      --border:#dee2e6;
+      --header-bg:#1a365d;
+      --header-text:#ffffff;
+      --header-accent:#2c5282;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+
+    /* Container */
+    body{background-color:var(--bg);}
+    .mobile-container{width:100%;max-width:1400px;margin:0 auto;min-height:100vh;background:var(--bg);padding:0 1rem}
+
+    /* Header */
+    .header{background:var(--header-bg);color:var(--header-text);padding:1.5rem 0;border-bottom:4px solid var(--header-accent);margin-bottom:1.5rem}
+    .header-row{display:flex;align-items:center;margin-bottom:12px}
+    .btn-icon{background:transparent;border:0;color:#fff;width:36px;height:36px;border-radius:8px;display:grid;place-items:center;cursor:pointer}
+    .btn-icon:hover{background:rgba(255,255,255,0.12)}
+    .title{font-size:18px;font-weight:700;margin:0}
+    .subtitle{margin:2px 0 0 0;font-size:12px;opacity:.9}
+
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:1rem;margin:1rem 0 2rem}
+    .kpi{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:1rem;box-shadow:0 1px 3px rgba(0,0,0,0.05);color:var(--text)}
+    .kpi .v{font-weight:700}
+    .kpi .l{font-size:10px;opacity:.9}
+
+    /* Tabs */
+    .tabs{padding:1rem 0}
+    .tablist{display:flex;flex-wrap:wrap;gap:0.5rem;border-bottom:2px solid var(--border);padding-bottom:0.5rem;margin-bottom:1.5rem}
+    .tab{background:none;border:none;border-bottom:3px solid transparent;color:var(--text-muted);padding:0.5rem 1rem;font-size:0.9rem;cursor:pointer;font-weight:500;transition:all 0.2s}
+    .tab:hover{color:var(--primary);}
+    .tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+
+    /* Cards */
+    .card{background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+    .card-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;background-color:#f8f9fa}
+    .card-title{margin:0;font-size:15px;font-weight:700}
+    .card-body{padding:12px 14px}
+
+    /* Inputs/buttons */
+    .row{display:flex;gap:8px}
+    .input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:10px;outline:none}
+    .input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--ring)}
+    .btn{background:var(--primary);color:#001428;border:0;border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:700}
+    .btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .btn.danger{background:var(--destructive);color:#1a0808}
+
+    /* Badges */
+    .badges{display:flex;gap:0.5rem;flex-wrap:wrap}
+    .badge{border:1px solid var(--border);color:var(--text-muted);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em}
+    .tone-destructive{color:var(--destructive);border-color:var(--destructive);background-color:rgba(220,53,69,0.1)}
+    .tone-warning{color:#e6a700;border-color:var(--warning);background-color:rgba(255,193,7,0.15)}
+    .tone-success{color:var(--success);border-color:var(--success);background-color:rgba(25,135,84,0.1)}
+
+    /* Lists */
+    .list{display:grid;gap:0.75rem}
+    .list-item{background:var(--card);border:1px solid var(--border);padding:1rem;border-radius:4px;transition:transform 0.2s, box-shadow 0.2s}
+    .list-item:hover{transform:translateY(-2px);box-shadow:0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)}
+    .item-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
+    .meta{display:flex;gap:12px;color:var(--text-muted);font-size:12px}
+
+    /* Utility */
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .muted{color:var(--text-muted)}
+    .mt-8{margin-top:8px}
+    .mt-12{margin-top:12px}
+
+    /* Responsive tweak */
+    @media (max-width:768px){
+      .kpi .v{font-size:1.25rem}
+      .kpi .l{font-size:0.7rem}
+      .tab{font-size:0.8rem;padding:0.5rem 0.5rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-row" style="justify-content: center; text-align: center;">
+        <div>
+          <p class="title">Authority Control Center</p>
+          <p class="subtitle">Unified Tourism Safety & Compliance</p>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><div class="v">4,023</div><div class="l">Active Tourists</div></div>
+        <div class="kpi"><div class="v">12</div><div class="l">Active Incidents</div></div>
+        <div class="kpi"><div class="v">37</div><div class="l">Resolved Today</div></div>
+        <div class="kpi"><div class="v">128</div><div class="l">Compliance</div></div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tablist">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="incidents">Incidents</button>
+        <button class="tab" data-tab="heatmap">Heatmap</button>
+        <button class="tab" data-tab="compliance">Compliance</button>
+        <button class="tab" data-tab="analytics">Analytics</button>
+      </div>
+
+      <!-- Overview -->
+      <section class="tabpanel" id="tab-overview">
+        <div class="card mt-12">
+          <div class="card-head"><span>🏛️</span><h3 class="card-title">Unified Search</h3></div>
+          <div class="card-body">
+            <div class="row">
+              <input class="input" id="q" placeholder="Search Digital ID / Incident ID / Location" />
+              <button class="btn" onclick="runSearch()">Search</button>
+            </div>
+            <div id="searchNote" class="muted mt-8" style="display:none"></div>
+            <div class="grid-2 mt-12">
+              <div class="card" style="background:rgba(78,162,255,.08);border-color:rgba(78,162,255,.25)">
+                <div class="card-body" style="display:flex;gap:8px;align-items:flex-start">
+                  <span>👥</span>
+                  <div>
+                    <div style="font-weight:600;font-size:14px">Tourist Footfall</div>
+                    <div class="muted" style="font-size:12px">Trending high at key hotspots</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" style="background:rgba(255,107,107,.08);border-color:rgba(255,107,107,.25)">
+                <div class="card-body" style="display:flex;gap:8px;align-items:flex-start">
+                  <span>⚠️</span>
+                  <div>
+                    <div style="font-weight:600;font-size:14px">Active Alerts</div>
+                    <div class="muted" style="font-size:12px">12 incidents need attention</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-12">
+          <div class="card-head"><span>📡</span><h3 class="card-title">Live Incident Feed</h3></div>
+          <div class="card-body">
+            <div class="list">
+              <div class="list-item">
+                <div class="item-head">
+                  <div>
+                    <div style="font-weight:600">Crowd surge alert</div>
+                    <div class="muted" style="font-size:12px">ID: INC-2025-001</div>
+                  </div>
+                  <div class="badges">
+                    <span class="badge tone-destructive">High</span>
+                    <span class="badge">Police</span>
+                    <span class="badge">Active</span>
+                  </div>
+                </div>
+                <div class="meta">
+                  <span>📍 Police Bazaar, Shillong</span>
+                  <span>🕒 2 min ago</span>
+                </div>
+                <div class="row mt-8">
+                  <button class="btn danger">Call</button>
+                  <button class="btn secondary">Locate</button>
+                  <button class="btn secondary">Details</button>
+                </div>
+              </div>
+
+              <div class="list-item">
+                <div class="item-head">
+                  <div>
+                    <div style="font-weight:600">Overcharging complaint</div>
+                    <div class="muted" style="font-size:12px">ID: INC-2025-002</div>
+                  </div>
+                  <div class="badges">
+                    <span class="badge tone-warning">Medium</span>
+                    <span class="badge">Tourism</span>
+                    <span class="badge">Responding</span>
+                  </div>
+                </div>
+                <div class="meta">
+                  <span>📍 Iewduh Market, Shillong</span>
+                  <span>🕒 10 min ago</span>
+                </div>
+              </div>
+
+              <div class="list-item">
+                <div class="item-head">
+                  <div>
+                    <div style="font-weight:600">Minor injury reported</div>
+                    <div class="muted" style="font-size:12px">ID: INC-2025-003</div>
+                  </div>
+                  <div class="badges">
+                    <span class="badge tone-success">Low</span>
+                    <span class="badge">Health</span>
+                    <span class="badge">Resolved</span>
+                  </div>
+                </div>
+                <div class="meta">
+                  <span>📍 MG Road, Gangtok</span>
+                  <span>🕒 20 min ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Incidents -->
+      <section class="tabpanel" id="tab-incidents" hidden>
+        <div class="card mt-12">
+          <div class="card-head"><span>🚨</span><h3 class="card-title">Cross-Agency Incidents</h3></div>
+          <div class="card-body">
+            <div class="list">
+              <div class="list-item">
+                <div class="item-head">
+                  <div>
+                    <div style="font-weight:600">Crowd surge alert</div>
+                    <div class="muted" style="font-size:12px">ID: INC-2025-001</div>
+                  </div>
+                  <div class="badges">
+                    <span class="badge tone-destructive">High</span>
+                    <span class="badge">Active</span>
+                  </div>
+                </div>
+                <div class="meta"><span>📍 Police Bazaar, Shillong</span><span>🕒 2 min ago</span></div>
+              </div>
+              <div class="list-item">
+                <div class="item-head">
+                  <div>
+                    <div style="font-weight:600">Overcharging complaint</div>
+                    <div class="muted" style="font-size:12px">ID: INC-2025-002</div>
+                  </div>
+                  <div class="badges">
+                    <span class="badge tone-warning">Medium</span>
+                    <span class="badge">Responding</span>
+                  </div>
+                </div>
+                <div class="meta"><span>📍 Iewduh Market, Shillong</span><span>🕒 10 min ago</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Heatmap -->
+      <section class="tabpanel" id="tab-heatmap" hidden>
+        <div class="card mt-12">
+          <div class="card-head"><span>👥</span><h3 class="card-title">Tourist Cluster Heatmap</h3></div>
+          <div class="card-body">
+            <div class="list">
+              <div class="list-item">
+                <div class="item-head">
+                  <div style="font-weight:600">Police Bazaar, Shillong</div>
+                  <div class="badges"><span class="badge tone-warning">Medium</span></div>
+                </div>
+                <div class="meta"><span>👥 847 tourists</span><span>🕒 5 min ago</span></div>
+              </div>
+              <div class="list-item">
+                <div class="item-head">
+                  <div style="font-weight:600">Kamakhya Temple, Guwahati</div>
+                  <div class="badges"><span class="badge tone-success">Low</span></div>
+                </div>
+                <div class="meta"><span>👥 1205 tourists</span><span>🕒 2 min ago</span></div>
+              </div>
+              <div class="list-item">
+                <div class="item-head">
+                  <div style="font-weight:600">Tawang Monastery</div>
+                  <div class="badges"><span class="badge tone-destructive">High</span></div>
+                </div>
+                <div class="meta"><span>👥 623 tourists</span><span>🕒 1 min ago</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Compliance -->
+      <section class="tabpanel" id="tab-compliance" hidden>
+        <div class="card mt-12">
+          <div class="card-head"><span>✅</span><h3 class="card-title">Compliance Checks</h3></div>
+          <div class="card-body">
+            <div class="list">
+              <div class="list-item">
+                <div class="item-head">
+                  <div>
+                    <div style="font-weight:600">Vendor permit audit</div>
+                    <div class="muted" style="font-size:12px">Ref: CMP-2025-111</div>
+                  </div>
+                  <div class="badges"><span class="badge tone-destructive">Pending</span><span class="badge">Municipal</span></div>
+                </div>
+                <div class="meta"><span>📍 Chandni Chowk, Delhi</span><span>🕒 45 min ago</span></div>
+              </div>
+              <div class="list-item">
+                <div class="item-head">
+                  <div>
+                    <div style="font-weight:600">Taxi fare compliance</div>
+                    <div class="muted" style="font-size:12px">Ref: CMP-2025-112</div>
+                  </div>
+                  <div class="badges"><span class="badge tone-success">Completed</span><span class="badge">Transport</span></div>
+                </div>
+                <div class="meta"><span>📍 Kamakhya Temple, Guwahati</span><span>🕒 1 hr ago</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-12" style="background:rgba(245,165,36,.08);border-color:rgba(245,165,36,.25)">
+          <div class="card-body" style="display:flex;gap:8px;align-items:flex-start">
+            <span>📄</span>
+            <div>
+              <div style="font-weight:600;font-size:14px">Pending Actions</div>
+              <div class="muted" style="font-size:12px">3 checks awaiting verification</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analytics -->
+      <section class="tabpanel" id="tab-analytics" hidden>
+        <div class="card mt-12">
+          <div class="card-head"><span>📊</span><h3 class="card-title">Quick Analytics</h3></div>
+          <div class="card-body muted" style="font-size:14px;display:grid;gap:8px">
+            <div>• Peak hours: 10:00 - 13:00; 18:00 - 21:00</div>
+            <div>• Top hotspots: Kamakhya Temple, Police Bazaar, Tawang Monastery</div>
+            <div>• Common issues: Overcharging, Lost & Found, First Aid</div>
+            <div style="font-size:12px">Note: Replace with real charts/data when backend is integrated.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Tabs logic
+    const tabs = document.querySelectorAll('.tab');
+    const panels = {
+      overview: document.getElementById('tab-overview'),
+      incidents: document.getElementById('tab-incidents'),
+      heatmap: document.getElementById('tab-heatmap'),
+      compliance: document.getElementById('tab-compliance'),
+      analytics: document.getElementById('tab-analytics'),
+    };
+    tabs.forEach(t => t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      const name = t.getAttribute('data-tab');
+      Object.entries(panels).forEach(([k, el]) => { el.hidden = (k !== name); });
+    }));
+
+    // Search logic (mock)
+    function runSearch(){
+      const q = document.getElementById('q').value.trim();
+      const note = document.getElementById('searchNote');
+      if(!q){
+        note.style.display='block';
+        note.textContent = 'Enter search text: Digital ID, Incident ID, or Location';
+        note.style.color = 'var(--destructive)';
+        return;
+      }
+      note.style.display='block';
+      note.textContent = `Search executed • Query: ${q}`;
+      note.style.color = 'var(--text-muted)';
+    }
+    window.runSearch = runSearch;
+  </script>
+</body>
+</html>
